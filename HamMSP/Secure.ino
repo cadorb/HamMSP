@@ -6,11 +6,11 @@ int sensorState = digitalRead(7);
   delay(100);
   if(sensorState == HIGH){
     digitalWrite(ledPin,HIGH);
-    leds.setColorRGB(0, 255, 0, 0);
+    leds.setColorRGB(0, 10, 0, 0);
     Serial.println("BIIIIM");
     delay(5000);
   }else{
     digitalWrite(ledPin,LOW);
-    leds.setColorRGB(0, 0, 0, 0);
+    leds.setColorRGB(0, 0, 10, 0);
   }
 }

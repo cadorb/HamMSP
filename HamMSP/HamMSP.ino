@@ -34,6 +34,7 @@ void setup()
     Serial.println("BME280 error!");
   }
   leds.init();
+  leds.setColorRGB(0, 0, 255, 0);
   pinMode(ledPin,OUTPUT);
 }
 
@@ -41,9 +42,9 @@ void loop()
 {
   secure();
   getBME280();
-  
-  
-  
+
+
+
 
   delay(100);
 }
