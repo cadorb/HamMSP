@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "Constants.c"
 
 int windControl() {
   int i = 0;
@@ -9,7 +10,8 @@ int windControl() {
 
 // s'arrete lorsque la roue a fait 1 tour complet
   while(turns < 10){
-    int BP = digitalRead(4);        // Lecture du capteur
+    //int BP = digitalRead(4);        // Lecture du capteur
+    int BP = digitalRead(ANEMOMETER);        // Lecture du capteur
 
     if (BP == LOW) {
       digitalWrite(13, HIGH);      // Allume la Led

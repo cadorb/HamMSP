@@ -1,5 +1,6 @@
 #include <Arduino.h>
+#include "Constants.c"
 
 int windDirection(){
-  return analogRead(A1);
+  return analogRead(WEATHERCOCK);
 }
