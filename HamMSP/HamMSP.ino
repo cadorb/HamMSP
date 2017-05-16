@@ -25,8 +25,11 @@ int windStatus;
 
 void setup()
 {
-  Ciao.begin();
   Serial.begin(9600);
+  delay(1000);
+  Serial.println("Starting Arduino");
+
+  Ciao.begin();
   if(!bme280.init()){
     Serial.println("BME280 error!");
   }
@@ -37,7 +40,11 @@ void setup()
 
 void loop()
 {
+  Serial.println("Getting BME");
   getBME280();
+
+  leds.setColorRGB(0, 0, 15, 0);
+  Serial.println("Checking Wind");
   windStatus = windControl();
 
   if(windStatus != 0){
@@ -45,6 +52,8 @@ void loop()
     Serial.println("Le vent est fort");
     Serial.print("Sens du vent : ");
     Serial.println(windDirection());
+    Ciao.write(CONNECTOR, TOPIC_WIND, String(windDirection())); // pushes data into a channel
+    delay(5000);
   }else{
     Serial.println("Le vent est faible");
     leds.setColorRGB(0, 0, 15, 0);

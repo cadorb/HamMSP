@@ -1,7 +1,8 @@
 #define CONNECTOR "mqtt"
-#define TOPIC_TEMP "/tmp/mesurements"
-#define TOPIC_PRES "/prs/mesurements"
-#define TOPIC_HUMI "/hmd/mesurements"
+#define TOPIC_TEMP "/bme/tmp/mesurements"
+#define TOPIC_PRES "/bme/prs/mesurements"
+#define TOPIC_HUMI "/bme/hmd/mesurements"
+#define TOPIC_WIND "/hammsp/gs232"
 #define NUM_LEDS  1
 #define LOOP_TIME 50
 #define ANEMOMETER 4
