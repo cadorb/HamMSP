@@ -42,6 +42,8 @@ void loop()
 {
   Serial.println("Getting BME");
   getBME280();
+  Serial.print("windDirection = ");
+  Serial.println(windDirection());
 
   leds.setColorRGB(0, 0, 15, 0);
   Serial.println("Checking Wind");
@@ -52,6 +54,7 @@ void loop()
     Serial.println("Le vent est fort");
     Serial.print("Sens du vent : ");
     Serial.println(windDirection());
+    Ciao.write(CONNECTOR, TOPIC_WINDSPEED, String(windStatus)); // pushes data into a channel
     Ciao.write(CONNECTOR, TOPIC_WIND, String(windDirection())); // pushes data into a channel
     delay(5000);
   }else{

@@ -40,11 +40,15 @@ int windControl() {
     delay(LOOP_TIME);
 
     Serial.println(t);
+
+    if(t > WINDSPEED*2){
+      break;
+    }
   }
 
 
 // Si temps court : ya du vent
-  if(t < 2000){
+  if(t < WINDSPEED){
     Serial.print("t = ");
     Serial.println(t);
     Serial.println("Putain ya du vent !");
