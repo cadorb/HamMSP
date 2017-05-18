@@ -1,4 +1,7 @@
 #include <Arduino.h>
+// Multithread simulator
+#include <SoftTimer.h>
+#include <PciListener.h>
 #include <Wire.h>
 // Wifi - MQTT
 #include <UnoWiFiDevEd.h>
@@ -23,6 +26,43 @@ const int ledPin=12;
 int windStatus;
 
 
+void meteoCheck(Task* me){
+  leds.setColorRGB(0, 25, 25, 0);
+  Serial.println("#Checking meteo ");
+  getBME280();
+}
+
+void windDirCheck(Task* me){
+  leds.setColorRGB(0, 25, 25, 25);
+  Serial.print("##Checking wind direction = ");
+  Serial.println(windDirection());
+}
+
+void windSpeedCheck(Task* me){
+  Serial.println("####Checking wind speed");
+  windStatus = windControl();
+
+  if(windStatus > 10){
+    leds.setColorRGB(0, 255, 0, 0);
+    Serial.println("Le vent est fort");
+    Serial.print("Sens du vent : ");
+    Serial.println(windDirection());
+    Ciao.write(CONNECTOR, TOPIC_WINDSPEED, String(windStatus)); // pushes data into a channel
+    Ciao.write(CONNECTOR, TOPIC_WIND, String(windDirection())); // pushes data into a channel
+  }else{
+    Serial.println("Le vent est faible");
+    leds.setColorRGB(0, 0, 15, 0);
+  }
+}
+
+// -- meteoCheck will be launched on every 2 seconds.
+Task taskMeteo(30000, meteoCheck);
+// -- windDirCheck will be launched on every 3 seconds.
+Task taskWindDir(10000, windDirCheck);
+// -- windSpeedCheck will be launched on every 5000 milliseconds.
+Task taskWindSpeed(WINDSPEED, windSpeedCheck);
+
+
 void setup()
 {
   Serial.begin(9600);
@@ -36,31 +76,10 @@ void setup()
   leds.init();
   leds.setColorRGB(0, 0, 15, 0);
   pinMode(ledPin,OUTPUT);
-}
 
-void loop()
-{
-  Serial.println("Getting BME");
-  getBME280();
-  Serial.print("windDirection = ");
-  Serial.println(windDirection());
 
-  leds.setColorRGB(0, 0, 15, 0);
-  Serial.println("Checking Wind");
-  windStatus = windControl();
-
-  if(windStatus != 0){
-    leds.setColorRGB(0, 255, 0, 0);
-    Serial.println("Le vent est fort");
-    Serial.print("Sens du vent : ");
-    Serial.println(windDirection());
-    Ciao.write(CONNECTOR, TOPIC_WINDSPEED, String(windStatus)); // pushes data into a channel
-    Ciao.write(CONNECTOR, TOPIC_WIND, String(windDirection())); // pushes data into a channel
-    delay(5000);
-  }else{
-    Serial.println("Le vent est faible");
-    leds.setColorRGB(0, 0, 15, 0);
-  }
-
-  delay(100);
+  // -- Register the tasks to the timer manager. Both tasks will start immediately.
+  SoftTimer.add(&taskMeteo);
+  SoftTimer.add(&taskWindDir);
+  SoftTimer.add(&taskWindSpeed);
 }
