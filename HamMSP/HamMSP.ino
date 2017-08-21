@@ -81,7 +81,7 @@ void windSpeedCheck(Task* me){
   Serial.println("####Checking wind speed");
   windStatus = windControl();
 
-  if(windStatus > 10){
+  if(windStatus > 50){
     leds.setColorRGB(0, 255, 0, 0);
     Serial.println("Le vent est fort");
     Serial.print("Sens du vent : ");

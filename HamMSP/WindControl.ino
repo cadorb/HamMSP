@@ -2,6 +2,7 @@
 #include "Constants.c"
 
 int windControl() {
+  Serial.println("##################Comptage des tours");
   int i = 0;
   int j = 0;
   int turns = 0;
@@ -10,6 +11,11 @@ int windControl() {
 
 // s'arrete lorsque la roue a fait 1 tour complet
   while(millis() - uptime < WINDSPEED){
+
+    Serial.print("uptime : ");
+    Serial.println(uptime);
+    Serial.print("millis : ");
+    Serial.println(millis());
     //int BP = digitalRead(4);        // Lecture du capteur
     int BP = digitalRead(ANEMOMETER);        // Lecture du capteur
 
@@ -29,5 +35,7 @@ int windControl() {
       j = 0;
     }
   }
+  Serial.print("##################return : ");
+  Serial.println(turns);
   return turns;
 }
